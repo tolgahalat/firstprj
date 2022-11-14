@@ -10,10 +10,25 @@ import { render } from "@testing-library/react";
 export default class App extends Component {
   state = {
     curCat: "-",
+    products: [],
   };
+
   changeCat = (c) => {
-    this.setState({ curCat: c.cName });
+    this.setState({ curCat: c.categoryName });
+    this.getProducts(c.id);
   };
+
+  getProducts = (id) => {
+    let url = "http://localhost:3000/products";
+    if (id) url += "?categoryId=" + id;
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => this.setState({ products: data }));
+  };
+
+  componentDidMount() {
+    this.getProducts();
+  }
 
   render() {
     let infoCat = {
@@ -40,8 +55,11 @@ export default class App extends Component {
               ></Category>
             </Col>
             <Col xs="9">
-              <Product proProps={infoPro}
-                curCat={this.state.curCat} />
+              <Product
+                proProps={infoPro}
+                curCat={this.state.curCat}
+                products={this.state.products}
+              />
             </Col>
           </Row>
         </Container>
