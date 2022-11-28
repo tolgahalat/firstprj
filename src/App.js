@@ -11,6 +11,7 @@ export default class App extends Component {
   state = {
     curCat: "-",
     products: [],
+    cart: [],
   };
 
   changeCat = (c) => {
@@ -30,6 +31,23 @@ export default class App extends Component {
     this.getProducts();
   }
 
+  addToCart = (product) => {
+    // alert(product.productName)
+    let newCart = this.state.cart;
+    var addedItem = newCart.find((p) => p.product.id === product.id);
+    if (addedItem) {
+      addedItem.count += 1;
+    } else {
+      newCart.push({ product: product, count: 1 });
+    }
+    this.setState({ cart: newCart });
+  };
+
+  removeFromCart = (product) => {
+    let newCart = this.state.cart.filter((p) => p.product.id !== product.id);
+    this.setState({ cart: newCart });
+  };
+
   render() {
     let infoCat = {
       title: "Categories",
@@ -44,7 +62,10 @@ export default class App extends Component {
       <div>
         <Container>
           <Row>
-            <NaviBar></NaviBar>
+            <NaviBar
+              cart={this.state.cart}
+              removeFromCart={this.removeFromCart}
+            ></NaviBar>
           </Row>
           <Row>
             <Col xs="3">
@@ -59,6 +80,7 @@ export default class App extends Component {
                 proProps={infoPro}
                 curCat={this.state.curCat}
                 products={this.state.products}
+                addToCart={this.addToCart}
               />
             </Col>
           </Row>
