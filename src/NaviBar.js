@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import {
   Collapse,
   Navbar,
@@ -34,18 +35,28 @@ export default class NaviBar extends Component {
     return (
       <div>
         <Navbar color="light" light expand="md">
-          <NavbarBrand href="/">NaviBar</NavbarBrand>
+          <NavbarBrand href="/">Main</NavbarBrand>
           <NavbarToggler onClick={this.toggle}></NavbarToggler>
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="me-auto" navbar>
-              <NavItem>
+            <NavItem>
+              {/* <NavLink> */}
+                <Link to="testform">Test Form</Link>
+                {/* </NavLink> */}
+              </NavItem>
+            <NavItem>
+              <NavLink>
+                <Link to="NewForm">New Form</Link>
+                </NavLink>
+              </NavItem>
+              {/* <NavItem>
                 <NavLink href="/components/">Components</NavLink>
               </NavItem>
               <NavItem>
                 <NavLink href="https://github.com/reactstrap/reactstrap">
                   GitHub
-                </NavLink>
-              </NavItem>
+                </NavLink> 
+              </NavItem>*/}
               {/* <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>
                   Options

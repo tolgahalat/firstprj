@@ -6,6 +6,12 @@ import NaviBar from "./NaviBar";
 import Product from "./Product";
 import { Container, Row, Col } from "reactstrap";
 import { render } from "@testing-library/react";
+import alertify from "alertifyjs";
+import { Route, Routes } from "react-router-dom";
+import Empty from "./Empty";
+import Cart from "./Cart";
+import TestForm from "./TestForm";
+import NewForm from "./NewForm";
 
 export default class App extends Component {
   state = {
@@ -41,11 +47,13 @@ export default class App extends Component {
       newCart.push({ product: product, count: 1 });
     }
     this.setState({ cart: newCart });
+    alertify.success(product.productName + " added.", 3);
   };
 
   removeFromCart = (product) => {
     let newCart = this.state.cart.filter((p) => p.product.id !== product.id);
     this.setState({ cart: newCart });
+    alertify.error(product.productName + " removed.", 3);
   };
 
   render() {
@@ -67,23 +75,49 @@ export default class App extends Component {
               removeFromCart={this.removeFromCart}
             ></NaviBar>
           </Row>
-          <Row>
-            <Col xs="3">
-              <Category
-                catProps={infoCat}
-                changeCat={this.changeCat}
-                curCat={this.state.curCat}
-              ></Category>
-            </Col>
-            <Col xs="9">
-              <Product
-                proProps={infoPro}
-                curCat={this.state.curCat}
-                products={this.state.products}
-                addToCart={this.addToCart}
-              />
-            </Col>
-          </Row>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Row>
+                  <Col xs="3">
+                    <Category
+                      catProps={infoCat}
+                      changeCat={this.changeCat}
+                      curCat={this.state.curCat}
+                    ></Category>
+                  </Col>
+                  <Col xs="9">
+                    <Product
+                      proProps={infoPro}
+                      curCat={this.state.curCat}
+                      products={this.state.products}
+                      addToCart={this.addToCart}
+                    />
+                  </Col>
+                </Row>
+              }
+            />
+            <Route
+              path="/cart"
+              element={
+                <Cart
+                  cart={this.state.cart}
+                  removeFromCart={this.removeFromCart}
+                ></Cart>
+              }
+            ></Route>
+            <Route
+              path="*"
+              element={
+                <Row>
+                  <Empty />
+                </Row>
+              }
+            ></Route>
+            <Route path="/testform" element={<Row><TestForm></TestForm></Row>}></Route>
+            <Route path="/newForm" element={<Row><NewForm></NewForm></Row>}></Route>
+          </Routes>
         </Container>
       </div>
     );
